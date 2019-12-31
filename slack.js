@@ -3,15 +3,17 @@ const socketio = require('socket.io')
 const app = express()
 
 let namespaces = require('./data/namespaces')
-
-namespaces.forEach((namespace) => {
-    console.log(namespace)
-})
 app.use(express.static(__dirname + '/public'));
 
 const port = process.env.PORT || 9000
 const expressServer = app.listen(port, () => console.log(`Listening on port ${port}`))
 const io = socketio(expressServer)
+
+namespaces.forEach((namespace) => {
+    io.of(namespace.endpoint).on('connection', (socket)=>{
+        console.log(`${socket.id} has join ${namespace.endpoint}`)
+    })
+})
 
 io.on('connection', (socket)=>{
     socket.emit('messageFromServer', {data:'Welcome to the socketio server'})
