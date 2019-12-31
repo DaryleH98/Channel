@@ -1,6 +1,13 @@
 const socket = io('http://localhost:9000')
-const socket2 = io('http://localhost:9000/admin')
 
+console.log(socket.io)
+socket.on('connect', ()=>{
+    console.log(socket.id)
+})
+
+socket.on('nsList', (nsData)=>{
+    console.log("The list of namespaces has arrived!")
+})
 socket.on('messageFromServer', (dataFromServer)=>{
     console.log(dataFromServer);
     socket.emit('dataToServer', {data: "Data from the Client!"})
